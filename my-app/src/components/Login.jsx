@@ -6,6 +6,7 @@ const Login = ({ onClose }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const navigate = window.location.pathname === '/login' ? null : null;
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -14,7 +15,8 @@ const Login = ({ onClose }) => {
     }
     setError("");
     alert("Logged in successfully!");
-    onClose(); // Close modal on success
+    window.location.href = '/'; // Redirect to dashboard
+    if (onClose) onClose(); // Close modal on success
   };
 
   return (

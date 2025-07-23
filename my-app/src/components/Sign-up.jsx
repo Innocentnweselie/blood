@@ -16,7 +16,8 @@ const SignUp = ({ onClose }) => {
     }
     setError("");
     alert("Account created successfully!");
-    onClose(); // Close modal on success
+    window.location.href = '/'; // Redirect to dashboard
+    if (onClose) onClose(); // Close modal on success
   };
 
   return (

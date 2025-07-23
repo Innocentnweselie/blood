@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // import Navbar from '../components/Navbar';
 
 export default function App(){
@@ -35,7 +36,9 @@ export default function App(){
                     <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">Inventory</li>
                     <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">Suppliers</li>
                     <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">Reports</li>
-                    <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">Settings</li>
+                    <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">
+                      <Link to="/settings">Settings</Link>
+                    </li>
                 </ul>
             </div>
             {/* main content*/}
