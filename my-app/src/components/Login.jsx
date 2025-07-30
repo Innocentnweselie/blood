@@ -54,6 +54,9 @@ const Login = ({ onClose }) => {
               placeholder="Enter your password"
               required
             />
+          <div className="flex justify-end mt-1">
+            <Link to="/forgot-password" className="text-sm text-blue-500 hover:underline">Forgot Password?</Link>
+          </div>
           </div>
           <button
             type="submit"
@@ -61,7 +64,10 @@ const Login = ({ onClose }) => {
           >
             Login
           </button>
-          <p>Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
+        <div className="flex flex-col items-center mt-2 space-y-1">
+          <p>Don't have an account? <Link to="/sign-up" className="text-blue-500 hover:underline">Sign Up</Link></p>
+          <Link to="/reset-password" className="text-sm text-blue-500 hover:underline">Reset Password</Link>
+        </div>
         </form>
       </div>
     </div>
