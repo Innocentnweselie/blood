@@ -23,12 +23,13 @@ ChartJS.register(
   Legend
 );
 
-export default function DashboardPage() {
+export default function Dashboard() {
+  // Summary card data
   const cards = [
     { title: 'Total Stock', count: 450, color: 'bg-blue-600' },
-    { title: 'Low Stock', count: 12, color: 'bg-yellow-400' },
-    { title: 'Out of Stock', count: 5, color: 'bg-red-600' },
-    { title: 'Expiring Soon', count: 3, color: 'bg-orange-500' },
+    { title: 'Low Stock', count: 200, color: 'bg-yellow-400' },
+    { title: 'Out of Stock', count: 300, color: 'bg-red-600' },
+    { title: 'Expiring Soon', count: 150, color: 'bg-orange-500' },
   ];
 
   const inventory = [
@@ -38,8 +39,8 @@ export default function DashboardPage() {
   ];
 
   const alerts = [
-    '5 items are out of stock',
-    '3 items will expire in less than 12 days',
+    '300 items are out of stock',
+    '150 items will expire in less than 12 days',
     '4 items are below minimum quality',
   ];
 
@@ -63,18 +64,18 @@ export default function DashboardPage() {
     },
   };
 
-  // Pie Chart
+  // Pie Chart uses the card values for consistency
   const pieData = {
-    labels: ['In Stock', 'Low Stock', 'Out of Stock', 'Expiring Soon'],
+    labels: cards.map(card => card.title),
     datasets: [
       {
         label: 'Stock Breakdown',
-        data: [430, 12, 5, 3],
+        data: cards.map(card => card.count),
         backgroundColor: [
-          'rgba(34, 197, 94, 0.8)',    // green
-          'rgba(234, 179, 8, 0.8)',    // yellow
-          'rgba(239, 68, 68, 0.8)',    // red
-          'rgba(249, 115, 22, 0.8)',   // orange
+          'rgba(59, 130, 246, 0.8)',    // blue for Total Stock
+          'rgba(234, 179, 8, 0.8)',     // yellow for Low Stock
+          'rgba(239, 68, 68, 0.8)',     // red for Out of Stock
+          'rgba(249, 115, 22, 0.8)',    // orange for Expiring Soon
         ],
         borderColor: 'white',
         borderWidth: 2,
@@ -85,9 +86,10 @@ export default function DashboardPage() {
   const pieOptions = {
     responsive: true,
     plugins: {
-      legend: { position: 'bottom' },
-      title: { display: true, text: 'Stock Breakdown' },
+      legend: { position: 'bottom', labels: { color: '#374151', font: { size: 14 } } },
+      title: { display: true, text: 'Stock Breakdown', color: '#1e293b', font: { size: 18 } },
     },
+    maintainAspectRatio: false,
   };
 
   return (
@@ -178,7 +180,7 @@ export default function DashboardPage() {
           {/* Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Bar Chart */}
-            <div className="bg-white p-4 rounded-xl shadow-md">
+            <div className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between">
               <h2 className="text-xl font-bold mb-4 text-gray-800">Inventory Analysis</h2>
               <div className="h-64">
                 <Bar data={barData} options={barOptions} />
@@ -186,8 +188,8 @@ export default function DashboardPage() {
             </div>
 
             {/* Pie Chart */}
-            <div className="bg-white p-4 rounded-xl shadow-md">
-              <h2 className="text-xl font-bold mb-4 text-gray-800">Stock Breakdown</h2>
+            <div className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between">
+              <h2 className="text-xl font-bold mb-4 text-gray-800"></h2>
               <div className="h-64">
                 <Pie data={pieData} options={pieOptions} />
               </div>
