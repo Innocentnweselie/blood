@@ -9,7 +9,7 @@ export default function Logout() {
     // Clear user session/token here if needed
     // localStorage.removeItem('token');
     const timer = setTimeout(() => {
-      navigate('/login');
+      navigate('/');
     }, 1500);
     return () => clearTimeout(timer);
   }, [navigate]);
