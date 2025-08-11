@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // import Login from './components/Login.jsx';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = ({ onClose }) => {
   const [name, setName] = useState("");
@@ -8,6 +8,7 @@ const SignUp = ({ onClose }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
@@ -16,7 +17,7 @@ const SignUp = ({ onClose }) => {
     }
     setError("");
     alert("Account created successfully!");
-    window.location.href = '/'; // Redirect to dashboard
+    navigate('/dashboard'); // Redirect to dashboard
     if (onClose) onClose(); // Close modal on success
   };
 

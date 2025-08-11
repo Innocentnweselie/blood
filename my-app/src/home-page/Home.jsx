@@ -23,96 +23,12 @@ export default function Home() {
         <div className="text-xl font-bold">MedTracker</div>
         <div className="flex gap-6 items-center relative">
           <Link to="/" className="hover:text-black">Home</Link>
-          {/* Login/Sign-up Dropdown */}
+          {/* Login/Sign-up Dropdown replaced with navigation links */}
           <div className="relative group">
             <button className="hover:text-black focus:outline-none">Login / Sign Up</button>
-            <div className="absolute right-0 mt-2 w-72 bg-white text-black rounded shadow-lg p-4 z-10 hidden group-hover:block group-focus:block">
-              {(() => {
-                const [tab, setTab] = React.useState('login');
-                return (
-                  <div>
-                    <div className="flex mb-4">
-                      <button
-                        className={`flex-1 py-2 rounded-tl rounded-bl ${tab === 'login' ? 'bg-blue-700 text-white' : 'bg-gray-200'}`}
-                        onClick={() => setTab('login')}
-                        type="button"
-                      >
-                        Login
-                      </button>
-                      <button
-                        className={`flex-1 py-2 rounded-tr rounded-br ${tab === 'signup' ? 'bg-blue-700 text-white' : 'bg-gray-200'}`}
-                        onClick={() => setTab('signup')}
-                        type="button"
-                      >
-                        Sign Up
-                      </button>
-                    </div>
-                    {tab === 'login' ? (
-                      <form
-                        onSubmit={e => {
-                          e.preventDefault();
-                          setIsLoggedIn(true);
-                          navigate('/dashboard');
-                        }}
-                        className="flex flex-col gap-3"
-                      >
-                        <input
-                          type="email"
-                          placeholder="Email"
-                          className="border px-3 py-2 rounded"
-                          required
-                        />
-                        <input
-                          type="password"
-                          placeholder="Password"
-                          className="border px-3 py-2 rounded"
-                          required
-                        />
-                        <button
-                          type="submit"
-                          className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition"
-                        >
-                          Login
-                        </button>
-                      </form>
-                    ) : (
-                      <form
-                        onSubmit={e => {
-                          e.preventDefault();
-                          setIsLoggedIn(true);
-                          navigate('/dashboard');
-                        }}
-                        className="flex flex-col gap-3"
-                      >
-                        <input
-                          type="text"
-                          placeholder="Full Name"
-                          className="border px-3 py-2 rounded"
-                          required
-                        />
-                        <input
-                          type="email"
-                          placeholder="Email"
-                          className="border px-3 py-2 rounded"
-                          required
-                        />
-                        <input
-                          type="password"
-                          placeholder="Password"
-                          className="border px-3 py-2 rounded"
-                          required
-                        />
-                        <button
-                          type="submit"
-                          className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition"
-                        >
-                          Sign Up
-                        </button>
-                      </form>
-                    )}
-                  </div>
-                );
-              })()}
+            <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg p-2 z-10 hidden group-hover:block group-focus:block">
+              <Link to="/login" className="block px-4 py-2 hover:bg-blue-100 rounded">Login</Link>
+              <Link to="/sign-up" className="block px-4 py-2 hover:bg-blue-100 rounded">Sign Up</Link>
             </div>
           </div>
           <Link to="/about" className="hover:text-black">About</Link>

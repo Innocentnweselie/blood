@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const navigate = window.location.pathname === '/login' ? null : null;
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -15,7 +15,7 @@ const Login = ({ onClose }) => {
     }
     setError("");
     alert("Logged in successfully!");
-    window.location.href = '/'; // Redirect to dashboard
+    navigate('/dashboard'); // Redirect to dashboard
     if (onClose) onClose(); // Close modal on success
   };
 
