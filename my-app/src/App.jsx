@@ -17,9 +17,11 @@ import ForgotPassword from './components/ForgotPassword.jsx';
 import ResetPassword from './components/ResetPassword.jsx';
 import Logout from './components/Logout.jsx';
 
+
 // Info pages
 import About from './components/About.jsx';
 import Contact from './components/Contact.jsx';
+import Services from './components/Services.jsx';
 
 
 
@@ -42,7 +44,8 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        {/* Add more routes for other components if needed */}
+  <Route path="/services" element={<Services />} />
+  {/* Add more routes for other components if needed */}
       </Routes>
     </BrowserRouter>
   );

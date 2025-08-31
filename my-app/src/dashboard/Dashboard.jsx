@@ -27,9 +27,9 @@ export default function Dashboard() {
   // Summary card data
   const cards = [
     { title: 'Total Stock', count: 450, color: 'bg-blue-600' },
-    { title: 'Low Stock', count: 200, color: 'bg-yellow-400' },
-    { title: 'Out of Stock', count: 300, color: 'bg-red-600' },
-    { title: 'Expiring Soon', count: 150, color: 'bg-orange-500' },
+    { title: 'Low Stock', count: 100, color: 'bg-yellow-400' },
+    { title: 'Out of Stock', count: 200, color: 'bg-red-600' },
+    { title: 'Expiring Soon', count: 100, color: 'bg-orange-500' },
   ];
 
   const inventory = [
@@ -39,8 +39,8 @@ export default function Dashboard() {
   ];
 
   const alerts = [
-    '300 items are out of stock',
-    '150 items will expire in less than 12 days',
+    '200 items are out of stock',
+    '100 items will expire in less than 12 days',
     '4 items are below minimum quality',
   ];
 

@@ -22,7 +22,7 @@ const SignUp = ({ onClose }) => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="relative min-h-screen flex items-center justify-center bg-blue-200">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <button
           className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
