@@ -24,6 +24,10 @@ export default function Home() {
         <div className="flex gap-6 items-center relative">
           <Link to="/" className="hover:text-black">Home</Link>
           {/* Login/Sign-up Dropdown replaced with navigation links */}
+            <Link to="/about" className="hover:text-black">About</Link>
+              <Link to="/services" className="hover:text-black">Services</Link>
+             <Link to="/contact" className="hover:text-black">Contact</Link>
+          
           <div className="relative group">
             <button className="hover:text-black focus:outline-none">Login / Sign Up</button>
             <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg p-2 z-10 hidden group-hover:block group-focus:block">
@@ -31,8 +35,8 @@ export default function Home() {
               <Link to="/sign-up" className="block px-4 py-2 hover:bg-blue-100 rounded">Sign Up</Link>
             </div>
           </div>
-          <Link to="/about" className="hover:text-black">About</Link>
-          <Link to="/contact" className="hover:text-black">Contact</Link>
+      
+        
         </div>
       </nav>
 
@@ -184,7 +188,7 @@ export default function Home() {
     </div>
       </section>
 {/* footer */}
-  <footer className="w-full bg-blue-700 text-white py-5 mt-12">
+  <footer className="w-full bg-blue-600 text-white py-5 mt-12">
    <div className="mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-8">
         {/* Brand Info */}
         <div>
@@ -225,8 +229,8 @@ export default function Home() {
         </div>
       </div>
   </footer>
-  <div className='text-black text-center p-3 bg-blue-900'>
-    &copy; 2024 MedTracker. All rights reserved.
+  <div className='text-black text-center p-3 bg-blue-700'>
+    &copy; 2024 NgwaTech. All rights reserved.
   </div>
 </div>
   )

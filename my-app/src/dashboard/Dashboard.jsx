@@ -36,6 +36,7 @@ export default function Dashboard() {
     { name: 'Paracetamol', quantity: 40, expirationDate: '2024-01-01', supplier: 'HealthCop' },
     { name: 'Syringes', quantity: 20, expirationDate: '2026-04-10', supplier: 'MediSupply' },
     { name: 'Gloves', quantity: 10, expirationDate: '2026-01-04', supplier: 'SaveTouch' },
+    { name: 'Amoxicillin Capsules',quantity: 12, expirationDate: '2026-10-07', supplier: 'PharmaCam'},
   ];
 
   const alerts = [
