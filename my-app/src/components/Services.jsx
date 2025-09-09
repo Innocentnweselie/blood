@@ -27,14 +27,25 @@ const Services = ({
   ],
 }) => {
   return (
-    <section className="bg-blue-100">
-      <h2 className="text-center text-4xl font-bold mb-4 text-blue-700 ">{title}</h2>
-      <p className="text-center font-serif ">{description}</p>
-      <div className="grid grid-cols-3 gap-2 p-10">
+    <section className="bg-blue-100 py-16 px-6 md:px-20">
+      <h2 className="text-center text-3xl md:text-4xl font-bold mb-6 text-blue-700">
+        {title}
+      </h2>
+      <p className="text-center max-w-2xl mx-auto mb-12 text-gray-700">
+        {description}
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {services.map((service, idx) => (
-          <div key={idx}>
-            <img src={service.img} alt={service.alt} className="h-30 max-w-xl ml-20" />
-            <p className="w-60 ml-10">{service.text}</p>
+          <div
+            key={idx}
+            className="flex flex-col items-center text-center bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition"
+          >
+            <img
+              src={service.img}
+              alt={service.alt}
+              className="h-28 w-28 object-contain mb-4"
+            />
+            <p className="text-sm text-gray-700">{service.text}</p>
           </div>
         ))}
       </div>

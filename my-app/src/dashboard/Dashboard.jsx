@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Bar, Pie } from 'react-chartjs-2';
 import {
@@ -24,6 +24,8 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   // Summary card data
   const cards = [
     { title: 'Total Stock', count: 450, color: 'bg-blue-600' },
@@ -65,7 +67,7 @@ export default function Dashboard() {
     },
   };
 
-  // Pie Chart uses the card values for consistency
+  // Pie Chart
   const pieData = {
     labels: cards.map(card => card.title),
     datasets: [
@@ -73,10 +75,10 @@ export default function Dashboard() {
         label: 'Stock Breakdown',
         data: cards.map(card => card.count),
         backgroundColor: [
-          'rgba(59, 130, 246, 0.8)',    // blue for Total Stock
-          'rgba(234, 179, 8, 0.8)',     // yellow for Low Stock
-          'rgba(239, 68, 68, 0.8)',     // red for Out of Stock
-          'rgba(249, 115, 22, 0.8)',    // orange for Expiring Soon
+          'rgba(59, 130, 246, 0.8)',    // blue
+          'rgba(234, 179, 8, 0.8)',     // yellow
+          'rgba(239, 68, 68, 0.8)',     // red
+          'rgba(249, 115, 22, 0.8)',    // orange
         ],
         borderColor: 'white',
         borderWidth: 2,
@@ -95,8 +97,8 @@ export default function Dashboard() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="w-64 bg-white p-6 shadow-md">
+      {/* Sidebar - Desktop */}
+      <div className="hidden lg:block w-64 bg-white p-6 shadow-md">
         <h1 className="text-2xl font-bold text-blue-700 mb-8">MedTracker</h1>
         <ul className="space-y-4 text-gray-700 font-semibold">
           <li className="text-blue-700 bg-blue-100 rounded px-3 py-2">Dashboard</li>
@@ -118,10 +120,48 @@ export default function Dashboard() {
         </ul>
       </div>
 
+      {/* Sidebar - Mobile Drawer */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          <div className="w-64 bg-white p-6 shadow-md">
+            <h1 className="text-2xl font-bold text-blue-700 mb-8">MedTracker</h1>
+            <ul className="space-y-4 text-gray-700 font-semibold">
+              <li className="text-blue-700 bg-blue-100 rounded px-3 py-2">Dashboard</li>
+              <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">
+                <Link to="/inventory">Inventory</Link>
+              </li>
+              <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">
+                <Link to="/supplier">Suppliers</Link>
+              </li>
+              <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">
+                <Link to="/report">Reports</Link>
+              </li>
+              <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">
+                <Link to="/settings">Settings</Link>
+              </li>
+              <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">
+                <Link to="/logout">Logout</Link>
+              </li>
+            </ul>
+          </div>
+          {/* Overlay */}
+          <div
+            className="flex-1 bg-black bg-opacity-50"
+            onClick={() => setSidebarOpen(false)}
+          ></div>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-y-auto">
         {/* Topbar */}
         <div className="bg-white px-4 py-3 shadow-md flex justify-between items-center">
+          <button
+            className="lg:hidden text-blue-700 font-bold"
+            onClick={() => setSidebarOpen(true)}
+          >
+            ☰
+          </button>
           <h2 className="text-lg font-semibold">Dashboard</h2>
           <div className="text-sm text-gray-600">Admin</div>
         </div>
@@ -148,9 +188,9 @@ export default function Dashboard() {
           </div>
 
           {/* Inventory Table */}
-          <div className="bg-white p-4 rounded-xl shadow-md">
+          <div className="bg-white p-4 rounded-xl shadow-md overflow-x-auto">
             <h2 className="text-xl font-bold mb-2 text-gray-800">Current Inventory</h2>
-            <table className="w-full table-auto">
+            <table className="w-full min-w-[600px] table-auto">
               <thead>
                 <tr className="bg-gray-200 text-gray-700 text-left">
                   <th className="p-2">Item</th>
@@ -163,11 +203,15 @@ export default function Dashboard() {
                 {inventory.map((item, idx) => (
                   <tr key={idx} className="border-t hover:bg-gray-50">
                     <td className="p-2 text-gray-900">{item.name}</td>
-                    <td className={`p-2 font-bold ${
-                      item.quantity === 0 ? 'text-red-600' :
-                      item.quantity < 10 ? 'text-yellow-600' :
-                      'text-green-700'
-                    }`}>
+                    <td
+                      className={`p-2 font-bold ${
+                        item.quantity === 0
+                          ? 'text-red-600'
+                          : item.quantity < 10
+                          ? 'text-yellow-600'
+                          : 'text-green-700'
+                      }`}
+                    >
                       {item.quantity}
                     </td>
                     <td className="p-2 text-gray-700">{item.expirationDate}</td>
@@ -190,7 +234,7 @@ export default function Dashboard() {
 
             {/* Pie Chart */}
             <div className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between">
-              <h2 className="text-xl font-bold mb-4 text-gray-800"></h2>
+              <h2 className="text-xl font-bold mb-4 text-gray-800">Stock Breakdown</h2>
               <div className="h-64">
                 <Pie data={pieData} options={pieOptions} />
               </div>
@@ -201,6 +245,7 @@ export default function Dashboard() {
     </div>
   );
 }
+
 
 
 

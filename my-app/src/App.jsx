@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Main pages
 import Home from './home-page/Home.jsx';
@@ -8,6 +8,7 @@ import Settings from './components/Settings.jsx';
 import Supplier from './components/Supplier.jsx';
 import Report from './components/Report.jsx';
 import Inventory from './components/Inventory.jsx';
+import Reviews from './components/Reviews.jsx';
 
 
 // Auth pages
@@ -29,7 +30,7 @@ import Services from './components/Services.jsx';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -44,10 +45,11 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-  <Route path="/services" element={<Services />} />
-  {/* Add more routes for other components if needed */}
+        <Route path="/services" element={<Services />} />
+         <Route path="/reviews" element={<Reviews />} /> 
+        {/* Add more routes for other components if needed */}
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
