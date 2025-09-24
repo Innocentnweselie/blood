@@ -18,4 +18,11 @@ app.get("/", (req, res) => {
   res.send("Backend is working");
 });
 
+app.get("/api/reviews", (req, res) => {
+  res.json([
+    { author: "Jane", text: "Great app!" },
+    { author: "John", text: "Very helpful." }
+  ]);
+});
+
 app.listen(5000, () => console.log("Server running on port 5000"));

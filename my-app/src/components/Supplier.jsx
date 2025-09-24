@@ -13,28 +13,30 @@ const SupplierPage = () => {
   };
 
   return (
-    <div className="p-8 min-h-screen bg-gray-100">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Supplier Management</h1>
+    <div className="p-4 md:p-8 min-h-screen bg-gray-100">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold">Supplier Management</h1>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full md:w-auto"
         >
           + Add Supplier
         </button>
       </div>
 
+      {/* Supplier List */}
       {suppliers.length === 0 ? (
         <p className="text-gray-500">No suppliers added yet.</p>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {suppliers.map((supplier, index) => (
             <div
               key={index}
-              className="p-4 bg-white shadow rounded-xl flex justify-between items-center"
+              className="p-4 bg-white shadow rounded-xl flex flex-col justify-between"
             >
               <div>
-                <p className="font-semibold">{supplier.name}</p>
+                <p className="font-semibold text-lg">{supplier.name}</p>
                 <p className="text-gray-600 text-sm">{supplier.contact}</p>
                 <p className="text-gray-600 text-sm">{supplier.email}</p>
               </div>
@@ -45,8 +47,8 @@ const SupplierPage = () => {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Add Supplier</h2>
             <form onSubmit={handleAddSupplier}>
               <div className="mb-4">
@@ -85,17 +87,17 @@ const SupplierPage = () => {
                   required
                 />
               </div>
-              <div className="flex justify-end gap-2">
+              <div className="flex flex-col sm:flex-row justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-gray-300 rounded-lg"
+                  className="px-4 py-2 bg-gray-300 rounded-lg w-full sm:w-auto"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg w-full sm:w-auto"
                 >
                   Save
                 </button>
@@ -109,3 +111,4 @@ const SupplierPage = () => {
 };
 
 export default SupplierPage;
+

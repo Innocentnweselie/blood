@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import Login from './components/Login.jsx';
 import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = ({ onClose }) => {
@@ -9,6 +8,7 @@ const SignUp = ({ onClose }) => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
@@ -17,26 +17,37 @@ const SignUp = ({ onClose }) => {
     }
     setError("");
     alert("Account created successfully!");
-    navigate('/dashboard'); // Redirect to dashboard
+    navigate("/dashboard"); // Redirect to dashboard
     if (onClose) onClose(); // Close modal on success
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-blue-200">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <button
-          className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Sign Up</h2>
+    <div className="relative min-h-screen flex items-center justify-center bg-blue-200 px-4 sm:px-6">
+      <div className="relative bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-sm sm:max-w-md md:max-w-lg">
+        {/* Close button (optional if modal) */}
+        {onClose && (
+          <button
+            className="absolute top-3 right-3 text-gray-600 hover:text-red-500"
+            onClick={onClose}
+          >
+            ✕
+          </button>
+        )}
+
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center text-gray-800">
+          Sign Up
+        </h2>
+
         {error && (
           <div className="mb-4 text-red-500 text-sm text-center">{error}</div>
         )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Name</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Name
+            </label>
             <input
               type="text"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -46,8 +57,12 @@ const SignUp = ({ onClose }) => {
               required
             />
           </div>
+
+          {/* Email */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -57,8 +72,12 @@ const SignUp = ({ onClose }) => {
               required
             />
           </div>
+
+          {/* Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Password</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -68,13 +87,22 @@ const SignUp = ({ onClose }) => {
               required
             />
           </div>
+
+          {/* Submit */}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
           >
             Sign Up
           </button>
-          <p>I have an account? <Link to="/login">Sign in</Link></p>
+
+          {/* Footer */}
+          <p className="text-center text-sm sm:text-base mt-2">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-600 hover:underline">
+              Sign in
+            </Link>
+          </p>
         </form>
       </div>
     </div>
@@ -82,3 +110,4 @@ const SignUp = ({ onClose }) => {
 };
 
 export default SignUp;
+

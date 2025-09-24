@@ -43,11 +43,12 @@ function Inventory() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-        <h1 className="text-3xl font-bold">Inventory</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Inventory</h1>
         <button
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow w-full sm:w-auto"
           onClick={() => setShowModal(true)}
         >
           + Add Item
@@ -57,7 +58,7 @@ function Inventory() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg">
             <h3 className="text-lg font-bold mb-4">Add New Item</h3>
             <form onSubmit={handleAddItem} className="space-y-3">
               <input
@@ -100,7 +101,6 @@ function Inventory() {
                 className="w-full border px-3 py-2 rounded"
                 name="expiryDate"
                 type="date"
-                placeholder="Expiry Date"
                 value={form.expiryDate}
                 onChange={handleInputChange}
                 required
@@ -108,14 +108,14 @@ function Inventory() {
               <div className="flex flex-col sm:flex-row justify-end gap-2 mt-2">
                 <button
                   type="button"
-                  className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+                  className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 w-full sm:w-auto"
                   onClick={() => setShowModal(false)}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 w-full sm:w-auto"
                 >
                   Add
                 </button>
@@ -125,20 +125,21 @@ function Inventory() {
         </div>
       )}
 
+      {/* Table */}
       {items.length === 0 ? (
-        <p>No inventory items available.</p>
+        <p className="text-gray-600">No inventory items available.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-[700px] w-full border border-gray-300 rounded-lg">
+          <table className="min-w-[700px] w-full border border-gray-300 rounded-lg text-sm sm:text-base">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border border-gray-300 px-4 py-2 text-left">ID</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Batch Number</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Quantity</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Reorder Level</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Expiry Date</th>
-                <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
+                <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left">ID</th>
+                <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left">Name</th>
+                <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left">Batch Number</th>
+                <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left">Quantity</th>
+                <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left">Reorder Level</th>
+                <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left">Expiry Date</th>
+                <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -146,13 +147,13 @@ function Inventory() {
                 const status = getStatus(item);
                 return (
                   <tr key={item.id} className="hover:bg-gray-100">
-                    <td className="border border-gray-300 px-4 py-2">{item.id}</td>
-                    <td className="border border-gray-300 px-4 py-2">{item.name}</td>
-                    <td className="border border-gray-300 px-4 py-2">{item.batchNumber}</td>
-                    <td className="border border-gray-300 px-4 py-2">{item.quantity}</td>
-                    <td className="border border-gray-300 px-4 py-2">{item.reorderLevel}</td>
-                    <td className="border border-gray-300 px-4 py-2">{item.expiryDate}</td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-2 sm:px-4 py-2">{item.id}</td>
+                    <td className="border border-gray-300 px-2 sm:px-4 py-2">{item.name}</td>
+                    <td className="border border-gray-300 px-2 sm:px-4 py-2">{item.batchNumber}</td>
+                    <td className="border border-gray-300 px-2 sm:px-4 py-2">{item.quantity}</td>
+                    <td className="border border-gray-300 px-2 sm:px-4 py-2">{item.reorderLevel}</td>
+                    <td className="border border-gray-300 px-2 sm:px-4 py-2">{item.expiryDate}</td>
+                    <td className="border border-gray-300 px-2 sm:px-4 py-2">
                       <Badge color={status.color}>{status.text}</Badge>
                     </td>
                   </tr>
@@ -167,4 +168,5 @@ function Inventory() {
 }
 
 export default Inventory;
+
 

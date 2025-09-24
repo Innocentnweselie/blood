@@ -9,9 +9,18 @@ export default function Badge({ color, children }) {
 
   return (
     <span
-      className={`px-2 py-1 rounded-full text-xs font-semibold ${colorMap[color] || 'bg-gray-100 text-gray-800'}`}
+      className={`
+        inline-block
+        px-2 py-1 sm:px-3 sm:py-1.5
+        rounded-full
+        text-[10px] sm:text-xs md:text-sm
+        font-semibold
+        truncate
+        ${colorMap[color] || 'bg-gray-100 text-gray-800'}
+      `}
     >
       {children}
     </span>
   );
 }
+

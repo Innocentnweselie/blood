@@ -45,7 +45,7 @@ export default function Settings() {
     setTimeout(() => setPasswordMsg(''), 2000);
   };
 
-  // Toggle dark mode and update root class
+  // Toggle dark mode
   useEffect(() => {
     const root = window.document.documentElement;
     if (darkMode) {
@@ -59,12 +59,16 @@ export default function Settings() {
   const toggleNotifications = () => setNotifications((n) => !n);
 
   return (
-    <div className="p-6 bg-gradient-to-br from-gray-100 to-blue-50 min-h-screen dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
-      <h2 className="text-center text-3xl font-bold mb-8 text-blue-800">Settings</h2>
+    <div className="p-4 sm:p-6 bg-gradient-to-br from-gray-100 to-blue-50 min-h-screen dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <h2 className="text-center text-2xl sm:text-3xl font-bold mb-8 text-blue-800">
+        Settings
+      </h2>
 
       {/* Profile Section */}
-      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8 max-w-xl mx-auto transition-colors duration-300">
-        <h3 className="text-xl font-semibold mb-4 text-blue-700">Profile Information</h3>
+      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 mb-8 max-w-xl w-full mx-auto transition-colors duration-300">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-blue-700">
+          Profile Information
+        </h3>
         <form className="space-y-4" onSubmit={handleProfileSubmit}>
           <div>
             <label className="block mb-1 text-sm font-medium">Full Name</label>
@@ -89,7 +93,7 @@ export default function Settings() {
           </div>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow"
+            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow"
           >
             Save Changes
           </button>
@@ -98,8 +102,10 @@ export default function Settings() {
       </section>
 
       {/* Password Section */}
-      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8 max-w-xl mx-auto transition-colors duration-300">
-        <h3 className="text-xl font-semibold mb-4 text-blue-700">Change Password</h3>
+      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 mb-8 max-w-xl w-full mx-auto transition-colors duration-300">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-blue-700">
+          Change Password
+        </h3>
         <form className="space-y-4" onSubmit={handlePasswordSubmit}>
           <div>
             <label className="block mb-1 text-sm font-medium">Current Password</label>
@@ -127,7 +133,7 @@ export default function Settings() {
           </div>
           <button
             type="submit"
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 shadow"
+            className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 shadow"
           >
             Update Password
           </button>
@@ -136,22 +142,28 @@ export default function Settings() {
       </section>
 
       {/* Preferences Section */}
-      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 max-w-xl mx-auto transition-colors duration-300">
-        <h3 className="text-xl font-semibold mb-4 text-blue-700">Preferences</h3>
-        <div className="flex items-center justify-between mb-4">
+      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 max-w-xl w-full mx-auto transition-colors duration-300">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-blue-700">
+          Preferences
+        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
           <span className="font-medium">Dark Mode</span>
           <button
             onClick={toggleDarkMode}
-            className={`px-4 py-1 rounded-full text-white transition-colors duration-200 ${darkMode ? 'bg-gray-800' : 'bg-gray-400'}`}
+            className={`px-4 py-1 rounded-full text-white transition-colors duration-200 ${
+              darkMode ? 'bg-gray-800' : 'bg-gray-400'
+            }`}
           >
             {darkMode ? 'On' : 'Off'}
           </button>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <span className="font-medium">Enable Notifications</span>
           <button
             onClick={toggleNotifications}
-            className={`px-4 py-1 rounded-full text-white transition-colors duration-200 ${notifications ? 'bg-green-600' : 'bg-gray-400'}`}
+            className={`px-4 py-1 rounded-full text-white transition-colors duration-200 ${
+              notifications ? 'bg-green-600' : 'bg-gray-400'
+            }`}
           >
             {notifications ? 'On' : 'Off'}
           </button>

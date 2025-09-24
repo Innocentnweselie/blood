@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const [reviews, setReviews] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // Mobile menu toggle
   const navigate = useNavigate();
@@ -12,6 +13,13 @@ export default function Home() {
       navigate("/login");
     }
   };
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/reviews")
+      .then((res) => res.json())
+      .then((data) => setReviews(data))
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -81,22 +89,46 @@ export default function Home() {
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="absolute top-full left-0 w-full bg-blue-700 text-white flex flex-col items-center py-6 space-y-4 md:hidden animate-slideDown z-20">
-            <Link to="/" className="hover:text-black" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/"
+              className="hover:text-black"
+              onClick={() => setMenuOpen(false)}
+            >
               Home
             </Link>
-            <Link to="/about" className="hover:text-black" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/about"
+              className="hover:text-black"
+              onClick={() => setMenuOpen(false)}
+            >
               About
             </Link>
-            <Link to="/services" className="hover:text-black" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/services"
+              className="hover:text-black"
+              onClick={() => setMenuOpen(false)}
+            >
               Services
             </Link>
-            <Link to="/contact" className="hover:text-black" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/contact"
+              className="hover:text-black"
+              onClick={() => setMenuOpen(false)}
+            >
               Contact
             </Link>
-            <Link to="/login" className="hover:text-black" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/login"
+              className="hover:text-black"
+              onClick={() => setMenuOpen(false)}
+            >
               Login
             </Link>
-            <Link to="/sign-up" className="hover:text-black" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/sign-up"
+              className="hover:text-black"
+              onClick={() => setMenuOpen(false)}
+            >
               Sign Up
             </Link>
           </div>
@@ -225,26 +257,12 @@ export default function Home() {
           What Our Users Say
         </h2>
         <div className="grid gap-8 md:grid-cols-3">
-          <div className="bg-blue-100 p-6 rounded-lg shadow-md">
-            <p className="mb-4">
-              "MedTracker has revolutionized the way we manage our medical
-              supplies."
-            </p>
-            <h3 className="font-bold">- Dr. Mundi Sarah</h3>
-          </div>
-          <div className="bg-blue-100 p-6 rounded-lg shadow-md">
-            <p className="mb-4">
-              "The expiry date tracking feature has helped us minimize waste."
-            </p>
-            <h3 className="font-bold">- Ngwa Blaise, Pharmacist</h3>
-          </div>
-          <div className="bg-blue-100 p-6 rounded-lg shadow-md">
-            <p className="mb-4">
-              "Reporting tools have provided invaluable insights into our
-              inventory."
-            </p>
-            <h3 className="font-bold">- Che Desmond</h3>
-          </div>
+          {reviews.map((review, idx) => (
+            <div key={idx} className="bg-blue-100 p-6 rounded-lg shadow-md">
+              <p className="mb-4">"{review.text}"</p>
+              <h3 className="font-bold">- {review.author}</h3>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -278,7 +296,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full bg-blue-600 text-white py-10">
+      <footer className="w-full bg-blue-600 text-white pt-10 pb-0 relative z-10">
         <div className="mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-8">
           <div>
             <h2 className="text-2xl font-bold">MedTracker</h2>
