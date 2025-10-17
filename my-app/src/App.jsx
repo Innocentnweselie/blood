@@ -9,6 +9,7 @@ import Supplier from './components/Supplier.jsx';
 import Report from './components/Report.jsx';
 import Inventory from './components/Inventory.jsx';
 import Reviews from './components/Reviews.jsx';
+import PrivacyPolicy from './components/PrivacyPolicy.jsx';
 
 
 // Auth pages
@@ -47,6 +48,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/services" element={<Services />} />
          <Route path="/reviews" element={<Reviews />} /> 
+         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         {/* Add more routes for other components if needed */}
       </Routes>
     </Router>

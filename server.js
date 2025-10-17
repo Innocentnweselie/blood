@@ -13,13 +13,26 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/users', userRoutes);
+
+// Root route for testing
+app.get("/", (req, res) => {
+    res.send("Backend is working");
+});
+
+app.get("/api/reviews", (req, res) => {
+  res.json([
+    { author: "Jane", text: "Great app!" },
+    { author: "John", text: "Very helpful." }
+  ]);
+});
+
 // Connect to MongoDB
 connectDB();
 
 
 mongoose.connection.once('open', () => {
-    console.log('Connected to MongoDB');
+    console.log('MongoDB Connected...');
     app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+        console.log(`Server running on port ${PORT}`);
     });
 });
