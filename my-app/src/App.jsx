@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Main pages
 import Home from './home-page/Home.jsx';
@@ -11,7 +13,6 @@ import Inventory from './components/Inventory.jsx';
 import Reviews from './components/Reviews.jsx';
 import PrivacyPolicy from './components/PrivacyPolicy.jsx';
 
-
 // Auth pages
 import Login from './components/Login.jsx';
 import SignUp from './components/Sign-up.jsx';
@@ -19,36 +20,51 @@ import ForgotPassword from './components/ForgotPassword.jsx';
 import ResetPassword from './components/ResetPassword.jsx';
 import Logout from './components/Logout.jsx';
 
-
 // Info pages
 import About from './components/About.jsx';
 import Contact from './components/Contact.jsx';
 import Services from './components/Services.jsx';
 
-
-
-
-
 function App() {
   return (
     <Router>
+      {/* ToastContainer available globally for all CRUD notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
       <Routes>
+        {/* Main Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/supplier" element={<Supplier />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/report" element={<Report />} />
         <Route path="/inventory" element={<Inventory />} />
+        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+        {/* Auth Routes */}
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/logout" element={<Logout />} />
+
+        {/* Info Pages */}
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/services" element={<Services />} />
-         <Route path="/reviews" element={<Reviews />} /> 
-         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
         {/* Add more routes for other components if needed */}
       </Routes>
     </Router>

@@ -107,10 +107,8 @@ export default function Home() {
             Simplified. <br />
             <span className="text-blue-700">Reminding</span> You To <span className="text-blue-700">Care</span>
           </h2>
-          <p className="text-lg mt-5 text-gray-700">
-            Easily manage your medical inventory, track stock levels in real-time,
-            monitor expiry dates, receive low-stock alerts, and generate comprehensive
-            reports for efficient healthcare supply management.
+          <p className="text-lg mt-5 text-black">
+       Optimize medical inventory with real-time stock tracking, expiry monitoring, low-stock alerts, and actionable reports — learn more at /services.
           </p>
 
           <div className="mt-6">
