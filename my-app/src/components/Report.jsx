@@ -187,4 +187,4 @@ function Report() {
   );
 }
 
-export default Report
+export default Report;

@@ -269,6 +269,77 @@ export default function Home() {
           </div>
         </div>
       </section>
+  {/* Frequently Asked Questions */}
+<div className="bg-blue-50 p-6 rounded-xl shadow-md max-w-3xl mx-auto">
+  <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">
+    Frequently Asked Questions
+  </h2>
+
+  <div className="space-y-4">
+    {/* FAQ Card */}
+    <div className="bg-white p-4 rounded-lg shadow-sm h-28 flex flex-col justify-center">
+      <h3 className="font-semibold text-gray-800">
+        What is MedTracker?
+      </h3>
+      <p className="text-gray-600 text-sm mt-2">
+        MedTracker is a medical inventory management system that helps clinics,
+        pharmacies, and hospitals track stock, expiry dates, suppliers, and
+        generate reports.
+      </p>
+    </div>
+
+    <div className="bg-white p-4 rounded-lg shadow-sm h-28 flex flex-col justify-center">
+      <h3 className="font-semibold text-gray-800">
+        Who can use MedTracker?
+      </h3>
+      <p className="text-gray-600 text-sm mt-2">
+        Hospitals, clinics, pharmacies, laboratories, NGOs, and any health
+        facility that manages medical supplies.
+      </p>
+    </div>
+
+    <div className="bg-white p-4 rounded-lg shadow-sm h-28 flex flex-col justify-center">
+      <h3 className="font-semibold text-gray-800">
+        Does MedTracker alert for expired items?
+      </h3>
+      <p className="text-gray-600 text-sm mt-2">
+        Yes. MedTracker alerts you about expired items, expiring soon, low-stock,
+        and out-of-stock items.
+      </p>
+    </div>
+
+    <div className="bg-white p-4 rounded-lg shadow-sm h-28 flex flex-col justify-center">
+      <h3 className="font-semibold text-gray-800">
+        Can I generate inventory reports?
+      </h3>
+      <p className="text-gray-600 text-sm mt-2">
+        Yes. You can generate stock, expiry, and supplier-based reports.
+      </p>
+    </div>
+
+    <div className="bg-white p-4 rounded-lg shadow-sm h-28 flex flex-col justify-center">
+      <h3 className="font-semibold text-gray-800">
+        Is my data secure?
+      </h3>
+      <p className="text-gray-600 text-sm mt-2">
+        MedTracker uses secure authentication, encrypted connections, and
+        role-based access control.
+      </p>
+    </div>
+
+    <div className="bg-white p-4 rounded-lg shadow-sm h-28 flex flex-col justify-center">
+      <h3 className="font-semibold text-gray-800">
+        Does it work on mobile?
+      </h3>
+      <p className="text-gray-600 text-sm mt-2">
+        Yes, MedTracker is fully responsive and works on mobile, tablet, and
+        desktop devices.
+      </p>
+    </div>
+  </div>
+</div>
+
+
 
       {/* Contact */}
       <section className="bg-blue-100 py-16 px-6 md:px-20">

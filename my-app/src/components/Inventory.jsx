@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'; // added
+import { useStock } from '../context/StockContext.jsx';
 import Badge from './Badge.jsx';
+import api from '../utils/axiosInstance.js';
+import { toast } from 'react-toastify';
 
 function Inventory() {
-  const [items, setItems] = useState([]);
+  const navigate = useNavigate(); // added
+  const stock = useStock();
+  const [items, setItems] = useState(stock?.items || []);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
     name: '',
@@ -16,13 +20,12 @@ function Inventory() {
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/inventory';
-
-  // ✅ Fetch items from backend
+  // use the configured api instance - it already prefixes with `/api`
+  // endpoint for items on backend is `/items`
   const fetchItems = async () => {
     try {
-      const res = await axios.get(API_URL);
-      setItems(res.data);
+      const res = await api.get('/items');
+      setItems(res.data || []);
       toast.success('Inventory loaded successfully!');
     } catch (error) {
       console.error('❌ Error fetching inventory:', error);
@@ -74,11 +77,11 @@ function Inventory() {
 
     try {
       if (isEditing) {
-        const res = await axios.put(`${API_URL}/${editId}`, payload);
+        const res = await api.put(`/items/${editId}`, payload);
         setItems((prev) => prev.map((item) => (item._id === editId ? res.data : item)));
         toast.success('Item updated successfully!');
       } else {
-        const res = await axios.post(API_URL, payload);
+        const res = await api.post('/items', payload);
         setItems((prev) => [res.data, ...prev]);
         toast.success('Item added successfully!');
       }
@@ -108,7 +111,7 @@ function Inventory() {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
 
     try {
-      await axios.delete(`${API_URL}/${id}`);
+      await api.delete(`/items/${id}`);
       setItems((prev) => prev.filter((item) => item._id !== id));
       toast.info('Item deleted successfully.');
     } catch (error) {
@@ -121,16 +124,25 @@ function Inventory() {
     <div className="p-4 sm:p-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold">Inventory</h1>
-        <button
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow w-full sm:w-auto"
-          onClick={() => {
-            resetForm();
-            setShowModal(true);
-          }}
-        >
-          + Add Item
-        </button>
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <button
+            onClick={() => navigate('/dashboard')}
+            aria-label="Go back to dashboard"
+            className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-3 rounded shadow"
+          >
+            ← Go Back
+          </button>
+          <h1 className="text-2xl sm:text-3xl font-bold">Inventory</h1>
+        </div>
+
+        <div className="flex gap-2 w-full sm:w-auto">
+          <button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow w-full sm:w-auto"
+            onClick={() => setShowModal(true)}
+          >
+            + Add Item
+          </button>
+        </div>
       </div>
 
       {/* Modal */}

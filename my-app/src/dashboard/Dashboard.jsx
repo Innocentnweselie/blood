@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Bar, Pie } from 'react-chartjs-2';
+"use client";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  Bar,
+  Pie
+} from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +14,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 // Register Chart.js components
 ChartJS.register(
@@ -25,36 +29,43 @@ ChartJS.register(
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [items, setItems] = useState([]);
 
-  // Summary card data
+  // FETCH ITEMS FROM API
+  useEffect(() => {
+    fetch("/api/items")
+      .then((res) => res.json())
+      .then((data) => setItems(data))
+      .catch((err) => console.error("Fetch error:", err));
+      // console.log(items);
+      
+  }, []);
+
+  // Summary card data (optional dynamic later)
   const cards = [
-    { title: 'Total Stock', count: 450, color: 'bg-blue-600' },
-    { title: 'Low Stock', count: 100, color: 'bg-yellow-400' },
-    { title: 'Out of Stock', count: 200, color: 'bg-red-600' },
-    { title: 'Expiring Soon', count: 100, color: 'bg-orange-500' },
+    { title: "Total Stock", count: 450, color: "bg-blue-600" },
+    { title: "Low Stock", count: 100, color: "bg-yellow-400" },
+    { title: "Out of Stock", count: 200, color: "bg-red-600" },
+    { title: "Expiring Soon", count: 100, color: "bg-orange-500" },
   ];
 
-  const inventory = [
-    { name: 'Paracetamol', quantity: 40, expirationDate: '2024-01-01', supplier: 'HealthCop' },
-    { name: 'Syringes', quantity: 20, expirationDate: '2026-04-10', supplier: 'MediSupply' },
-    { name: 'Gloves', quantity: 10, expirationDate: '2026-01-04', supplier: 'SaveTouch' },
-    { name: 'Amoxicillin Capsules',quantity: 12, expirationDate: '2026-10-07', supplier: 'PharmaCam'},
-  ];
+  const inventory = items.length > 0 ? items : [];
+  
 
   const alerts = [
-    '200 items are out of stock',
-    '100 items will expire in less than 12 days',
-    '4 items are below minimum quality',
+    "200 items are out of stock",
+    "100 items will expire in less than 12 days",
+    "4 items are below minimum quality",
   ];
 
-  // Bar Chart
+  // BAR CHART (dynamic from DB)
   const barData = {
-    labels: inventory.map(item => item.name),
+    labels: inventory.map((item) => item.item),
     datasets: [
       {
-        label: 'Quantity',
-        data: inventory.map(item => item.quantity),
-        backgroundColor: 'rgba(59, 130, 246, 0.7)', // Tailwind blue-500
+        label: "Quantity",
+        data: inventory.map((item) => item.quantity),
+        backgroundColor: "rgba(59, 130, 246, 0.7)",
       },
     ],
   };
@@ -62,25 +73,25 @@ export default function Dashboard() {
   const barOptions = {
     responsive: true,
     plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Inventory Quantity Overview' },
+      legend: { position: "top" },
+      title: { display: true, text: "Inventory Quantity Overview" },
     },
   };
 
-  // Pie Chart
+  // PIE CHART
   const pieData = {
-    labels: cards.map(card => card.title),
+    labels: cards.map((card) => card.title),
     datasets: [
       {
-        label: 'Stock Breakdown',
-        data: cards.map(card => card.count),
+        label: "Stock Breakdown",
+        data: cards.map((card) => card.count),
         backgroundColor: [
-          'rgba(59, 130, 246, 0.8)',    // blue
-          'rgba(234, 179, 8, 0.8)',     // yellow
-          'rgba(239, 68, 68, 0.8)',     // red
-          'rgba(249, 115, 22, 0.8)',    // orange
+          "rgba(59, 130, 246, 0.8)",
+          "rgba(234, 179, 8, 0.8)",
+          "rgba(239, 68, 68, 0.8)",
+          "rgba(249, 115, 22, 0.8)",
         ],
-        borderColor: 'white',
+        borderColor: "white",
         borderWidth: 2,
       },
     ],
@@ -89,8 +100,16 @@ export default function Dashboard() {
   const pieOptions = {
     responsive: true,
     plugins: {
-      legend: { position: 'bottom', labels: { color: '#374151', font: { size: 14 } } },
-      title: { display: true, text: 'Stock Breakdown', color: '#1e293b', font: { size: 18 } },
+      legend: {
+        position: "bottom",
+        labels: { color: "#374151", font: { size: 14 } },
+      },
+      title: {
+        display: true,
+        text: "Stock Breakdown",
+        color: "#1e293b",
+        font: { size: 18 },
+      },
     },
     maintainAspectRatio: false,
   };
@@ -100,8 +119,11 @@ export default function Dashboard() {
       {/* Sidebar - Desktop */}
       <div className="hidden lg:block w-64 bg-white p-6 shadow-md">
         <h1 className="text-2xl font-bold text-blue-700 mb-8">MedTracker</h1>
+
         <ul className="space-y-4 text-gray-700 font-semibold">
-          <li className="text-blue-700 bg-blue-100 rounded px-3 py-2">Dashboard</li>
+          <li className="text-blue-700 bg-blue-100 rounded px-3 py-2">
+            Dashboard
+          </li>
           <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">
             <Link to="/inventory">Inventory</Link>
           </li>
@@ -120,13 +142,16 @@ export default function Dashboard() {
         </ul>
       </div>
 
-      {/* Sidebar - Mobile Drawer */}
+      {/* Sidebar - Mobile */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 flex">
           <div className="w-64 bg-white p-6 shadow-md">
             <h1 className="text-2xl font-bold text-blue-700 mb-8">MedTracker</h1>
+
             <ul className="space-y-4 text-gray-700 font-semibold">
-              <li className="text-blue-700 bg-blue-100 rounded px-3 py-2">Dashboard</li>
+              <li className="text-blue-700 bg-blue-100 rounded px-3 py-2">
+                Dashboard
+              </li>
               <li className="hover:bg-gray-200 rounded px-3 py-2 cursor-pointer">
                 <Link to="/inventory">Inventory</Link>
               </li>
@@ -144,6 +169,7 @@ export default function Dashboard() {
               </li>
             </ul>
           </div>
+
           {/* Overlay */}
           <div
             className="flex-1 bg-black bg-opacity-50"
@@ -170,7 +196,10 @@ export default function Dashboard() {
           {/* Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {cards.map((card, idx) => (
-              <div key={idx} className={`p-4 rounded-xl shadow-md text-white ${card.color}`}>
+              <div
+                key={idx}
+                className={`p-4 rounded-xl shadow-md text-white ${card.color}`}
+              >
                 <h3 className="text-lg font-semibold">{card.title}</h3>
                 <p className="text-3xl font-bold">{card.count}</p>
               </div>
@@ -189,7 +218,10 @@ export default function Dashboard() {
 
           {/* Inventory Table */}
           <div className="bg-white p-4 rounded-xl shadow-md overflow-x-auto">
-            <h2 className="text-xl font-bold mb-2 text-gray-800">Current Inventory</h2>
+            <h2 className="text-xl font-bold mb-2 text-gray-800">
+              Current Inventory
+            </h2>
+
             <table className="w-full min-w-[600px] table-auto">
               <thead>
                 <tr className="bg-gray-200 text-gray-700 text-left">
@@ -199,22 +231,28 @@ export default function Dashboard() {
                   <th className="p-2">Supplier</th>
                 </tr>
               </thead>
+
               <tbody>
                 {inventory.map((item, idx) => (
                   <tr key={idx} className="border-t hover:bg-gray-50">
-                    <td className="p-2 text-gray-900">{item.name}</td>
+                    <td className="p-2 text-gray-900">{item.item}</td>
+
                     <td
                       className={`p-2 font-bold ${
                         item.quantity === 0
-                          ? 'text-red-600'
+                          ? "text-red-600"
                           : item.quantity < 10
-                          ? 'text-yellow-600'
-                          : 'text-green-700'
+                          ? "text-yellow-600"
+                          : "text-green-700"
                       }`}
                     >
                       {item.quantity}
                     </td>
-                    <td className="p-2 text-gray-700">{item.expirationDate}</td>
+
+                    <td className="p-2 text-gray-700">
+                      {new Date(item.expiryDate).toLocaleDateString()}
+                    </td>
+
                     <td className="p-2 text-gray-700">{item.supplier}</td>
                   </tr>
                 ))}
@@ -226,7 +264,9 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Bar Chart */}
             <div className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between">
-              <h2 className="text-xl font-bold mb-4 text-gray-800">Inventory Analysis</h2>
+              <h2 className="text-xl font-bold mb-4 text-gray-800">
+                Inventory Analysis
+              </h2>
               <div className="h-64">
                 <Bar data={barData} options={barOptions} />
               </div>
@@ -234,7 +274,9 @@ export default function Dashboard() {
 
             {/* Pie Chart */}
             <div className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between">
-              <h2 className="text-xl font-bold mb-4 text-gray-800">Stock Breakdown</h2>
+              <h2 className="text-xl font-bold mb-4 text-gray-800">
+                Stock Breakdown
+              </h2>
               <div className="h-64">
                 <Pie data={pieData} options={pieOptions} />
               </div>
@@ -245,7 +287,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-
-
-

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 // Props: title, description, services (array of {img, alt, text})
@@ -29,6 +30,17 @@ const Services = ({
 }) => {
   return (
     <section className="bg-blue-100 py-12 sm:py-16 px-4 sm:px-8 md:px-20">
+
+      {/* Go Back Home Button */}
+      <div className="w-full flex justify-start mb-4">
+        <Link
+          to="/"
+          className="px-2 py-1 bg-blue-700 text-white text-sm rounded-lg shadow-md hover:bg-blue-800 transition"
+        >
+          ⬅ Home
+        </Link>
+      </div>
+
       {/* Title */}
       <motion.h2
         className="text-center text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-blue-700"
@@ -63,7 +75,8 @@ const Services = ({
             transition={{ duration: 0.7, delay: idx * 0.2 }}
             whileHover={{
               scale: 1.05,
-              boxShadow: "0px 8px 25px rgba(0, 0, 0, 0.15), 0px 0px 20px rgba(59, 130, 246, 0.3)", // blue glow + soft shadow
+              boxShadow:
+                "0px 8px 25px rgba(0, 0, 0, 0.15), 0px 0px 20px rgba(59, 130, 246, 0.3)",
             }}
           >
             <img
@@ -80,4 +93,5 @@ const Services = ({
 };
 
 export default Services;
+
 

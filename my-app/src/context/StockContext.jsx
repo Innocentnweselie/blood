@@ -1,38 +1,40 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import api from "../utils/axiosInstance";
 
-// Example initial stock data
-const initialStock = [
-  {
-    id: 1,
-    name: 'Paracetamol',
-    batchNumber: 'A123',
-    quantity: 100,
-    reorderLevel: 20,
-    expiryDate: '2025-12-31',
-  },
-  {
-    id: 2,
-    name: 'Ibuprofen',
-    batchNumber: 'B456',
-    quantity: 50,
-    reorderLevel: 10,
-    expiryDate: '2025-08-15',
-  },
-];
+const StockContext = createContext(null);
 
-const StockContext = createContext();
+export function StockProvider({ children, initialItems = [] }) {
+  const [items, setItems] = useState(initialItems);
+  const [loadingStock, setLoadingStock] = useState(false);
 
-export function StockProvider({ children }) {
-  const [items, setItems] = useState(initialStock);
+  const loadStock = async () => {
+    try {
+      setLoadingStock(true);
+      const res = await api.get("/inventory");
+      setItems(res.data);
+    } catch (err) {
+      console.error("Error loading inventory:", err);
+    } finally {
+      setLoadingStock(false);
+    }
+  };
 
-  // You can add more stock management functions here
-  return (
-    <StockContext.Provider value={{ items, setItems }}>
-      {children}
-    </StockContext.Provider>
-  );
+  useEffect(() => {
+    loadStock();
+  }, []);
+
+  const addItem = (item) => setItems((prev) => [...prev, item]);
+  const updateItem = (id, patch) =>
+    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...patch } : it)));
+  const removeItem = (id) => setItems((prev) => prev.filter((it) => it.id !== id));
+
+  const value = { items, setItems, loadingStock, loadStock, addItem, updateItem, removeItem };
+
+  return <StockContext.Provider value={value}>{children}</StockContext.Provider>;
 }
 
-export function useStock() {
-  return useContext(StockContext);
-}
+export const useStock = () => {
+  const ctx = useContext(StockContext);
+  if (!ctx) throw new Error("useStock must be used within a StockProvider");
+  return ctx;
+};

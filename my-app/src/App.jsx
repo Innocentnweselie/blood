@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { StockProvider } from './context/StockContext.jsx'; // added
 
 // Main pages
 import Home from './home-page/Home.jsx';
@@ -28,6 +29,7 @@ import Services from './components/Services.jsx';
 function App() {
   return (
     <Router>
+      <StockProvider> {/* added */}
       {/* ToastContainer available globally for all CRUD notifications */}
       <ToastContainer
         position="top-right"
@@ -67,6 +69,7 @@ function App() {
 
         {/* Add more routes for other components if needed */}
       </Routes>
+      </StockProvider> {/* added */}
     </Router>
   );
 }
