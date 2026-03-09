@@ -8,7 +8,9 @@ export default defineConfig({
   // 🔥 Add this to forward /api/* requests to your backend
   server: {
     proxy: {
-      "/api": "http://localhost:5000"
+      "/api": "http://localhost:5001",
+      "/auth": "http://localhost:5001",
+      "/uploads": "http://localhost:5001"
     }
   }
 })

@@ -1,40 +1,42 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      setMessage("Please enter your email address.");
+      toast.error("Please enter your email address.");
       return;
     }
-    setMessage("If this email exists, a password reset link has been sent.");
+    try {
+      await api.post('/auth/forgot-password', { email });
+      toast.success(`OTP sent to ${email}. Please check your console/email.`);
+      navigate('/reset-password', { state: { email } });
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Failed to send OTP.");
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8">
-      <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center text-gray-800">
+    <div className="min-h-screen flex items-center justify-center app-shell px-4 sm:px-6 lg:px-8">
+      <div className="app-card p-6 sm:p-8 w-full max-w-md">
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center text-[var(--text)]">
           Forgot Password
         </h2>
 
-        {message && (
-          <div className="mb-4 text-blue-500 text-sm sm:text-base text-center">
-            {message}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-[var(--muted)]">
               Email
             </label>
             <input
               type="email"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              className="app-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
@@ -43,18 +45,18 @@ const ForgotPassword = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
+            className="app-btn app-btn-primary w-full"
           >
             Send Reset Link
           </button>
         </form>
 
         {/* Back to login link */}
-        <p className="mt-6 text-center text-sm sm:text-base text-gray-600">
+        <p className="mt-6 text-center text-sm sm:text-base text-[var(--muted)]">
           Remembered your password?{" "}
           <Link
             to="/login"
-            className="text-blue-500 hover:text-blue-700 font-medium"
+            className="text-[var(--primary)] hover:underline font-medium"
           >
             Back to Login
           </Link>
@@ -65,4 +67,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-

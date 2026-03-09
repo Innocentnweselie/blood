@@ -1,79 +1,144 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../utils/axiosInstance';
+import { useTheme } from '../context/ThemeContext';
+import AdminLayout from './AdminLayout';
+import { useAuth } from '../context/AuthContext';
 
 export default function Settings() {
-  // Profile state
-  const [profile, setProfile] = useState({
-    name: 'Neba James',
-    email: 'ngwa@example.com',
-  });
+  const { theme, toggleTheme, applyTheme } = useTheme();
+  const { updateUser } = useAuth();
+
+  const [profile, setProfile] = useState({ name: '', email: '' });
   const [profileMsg, setProfileMsg] = useState('');
+  const [profileError, setProfileError] = useState('');
 
-  // Password state
-  const [password, setPassword] = useState({
-    current: '',
-    new: '',
-  });
+  const [password, setPassword] = useState({ currentPassword: '', newPassword: '' });
   const [passwordMsg, setPasswordMsg] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
-  // Preferences
-  const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
-  // Handlers
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const { data } = await api.get('/settings/profile');
+        const user = data?.user;
+        if (user) {
+          setProfile({ name: user.name || '', email: user.email || '' });
+          updateUser({
+            name: user.name || '',
+            email: user.email || '',
+            theme: user.theme || theme,
+          });
+        }
+        setProfileError('');
+      } catch (err) {
+        setProfileError(err.response?.data?.error || 'Failed to load profile.');
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+
+    const loadTheme = async () => {
+      try {
+        const { data } = await api.get('/settings/theme');
+        if (data?.theme && data.theme !== theme) {
+          applyTheme(data.theme);
+        }
+      } catch (err) {
+        console.error('Failed to load theme preference:', err);
+      }
+    };
+
+    loadProfile();
+    loadTheme();
+  }, []);
+
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
-  const handleProfileSubmit = (e) => {
+
+  const handleProfileSubmit = async (e) => {
     e.preventDefault();
-    setProfileMsg('Profile updated!');
-    setTimeout(() => setProfileMsg(''), 2000);
+    setProfileMsg('');
+    setProfileError('');
+
+    try {
+      const { data } = await api.put('/settings/profile', profile);
+      const user = data?.user;
+      if (user) {
+        setProfile({ name: user.name || '', email: user.email || '' });
+        updateUser({
+          name: user.name || '',
+          email: user.email || '',
+          theme: user.theme || theme,
+        });
+      }
+      setProfileMsg('Profile updated!');
+      setTimeout(() => setProfileMsg(''), 2000);
+    } catch (err) {
+      setProfileError(err.response?.data?.error || 'Failed to update profile.');
+    }
   };
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setPassword((prev) => ({ ...prev, [name]: value }));
   };
-  const handlePasswordSubmit = (e) => {
+
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    if (!password.current || !password.new) {
-      setPasswordMsg('Please fill all fields.');
+    setPasswordMsg('');
+    setPasswordError('');
+
+    if (!password.currentPassword || !password.newPassword) {
+      setPasswordError('Please fill all fields.');
       return;
     }
-    setPasswordMsg('Password updated!');
-    setPassword({ current: '', new: '' });
-    setTimeout(() => setPasswordMsg(''), 2000);
+
+    try {
+      await api.put('/settings/password', {
+        currentPassword: password.currentPassword,
+        newPassword: password.newPassword,
+      });
+      updateUser({ mustChangePassword: false });
+      setPasswordMsg('Password updated!');
+      setPassword({ currentPassword: '', newPassword: '' });
+      setTimeout(() => setPasswordMsg(''), 2000);
+    } catch (err) {
+      setPasswordError(err.response?.data?.error || 'Failed to update password.');
+    }
   };
 
-  // Toggle dark mode
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (darkMode) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [darkMode]);
+  const handleThemeToggle = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    toggleTheme();
+    updateUser({ theme: nextTheme });
+  };
 
-  const toggleDarkMode = () => setDarkMode((d) => !d);
   const toggleNotifications = () => setNotifications((n) => !n);
 
   return (
-    <div className="p-4 sm:p-6 bg-gradient-to-br from-gray-100 to-blue-50 min-h-screen dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
-      <h2 className="text-center text-2xl sm:text-3xl font-bold mb-8 text-blue-800">
-        Settings
-      </h2>
+    <AdminLayout title="Settings">
+      <div className="p-4 sm:p-6">
+        <h2 className="text-center text-2xl sm:text-3xl font-semibold mb-8 text-[var(--primary)]">
+          Settings
+        </h2>
 
       {/* Profile Section */}
-      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 mb-8 max-w-xl w-full mx-auto transition-colors duration-300">
-        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-blue-700">
+      <section className="app-card p-4 sm:p-6 mb-8 max-w-xl w-full mx-auto">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-[var(--primary)]">
           Profile Information
         </h3>
+        {loadingProfile && <div className="text-sm text-[var(--muted)] mb-2">Loading profile...</div>}
+        {profileError && <div className="text-sm text-rose-500 mb-2">{profileError}</div>}
         <form className="space-y-4" onSubmit={handleProfileSubmit}>
           <div>
             <label className="block mb-1 text-sm font-medium">Full Name</label>
             <input
-              className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              className="app-input"
               name="name"
               value={profile.name}
               onChange={handleProfileChange}
@@ -84,7 +149,7 @@ export default function Settings() {
             <label className="block mb-1 text-sm font-medium">Email</label>
             <input
               type="email"
-              className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              className="app-input"
               name="email"
               value={profile.email}
               onChange={handleProfileChange}
@@ -93,27 +158,28 @@ export default function Settings() {
           </div>
           <button
             type="submit"
-            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow"
+            className="app-btn app-btn-primary w-full sm:w-auto"
           >
             Save Changes
           </button>
-          {profileMsg && <div className="text-green-600 text-sm mt-2">{profileMsg}</div>}
+          {profileMsg && <div className="text-emerald-500 text-sm mt-2">{profileMsg}</div>}
         </form>
       </section>
 
       {/* Password Section */}
-      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 mb-8 max-w-xl w-full mx-auto transition-colors duration-300">
-        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-blue-700">
+      <section className="app-card p-4 sm:p-6 mb-8 max-w-xl w-full mx-auto">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-[var(--primary)]">
           Change Password
         </h3>
+        {passwordError && <div className="text-sm text-rose-500 mb-2">{passwordError}</div>}
         <form className="space-y-4" onSubmit={handlePasswordSubmit}>
           <div>
             <label className="block mb-1 text-sm font-medium">Current Password</label>
             <input
               type="password"
-              className="w-full p-2 border rounded-md"
-              name="current"
-              value={password.current}
+              className="app-input"
+              name="currentPassword"
+              value={password.currentPassword}
               onChange={handlePasswordChange}
               required
               placeholder="Current password"
@@ -123,9 +189,9 @@ export default function Settings() {
             <label className="block mb-1 text-sm font-medium">New Password</label>
             <input
               type="password"
-              className="w-full p-2 border rounded-md"
-              name="new"
-              value={password.new}
+              className="app-input"
+              name="newPassword"
+              value={password.newPassword}
               onChange={handlePasswordChange}
               required
               placeholder="New password"
@@ -133,42 +199,39 @@ export default function Settings() {
           </div>
           <button
             type="submit"
-            className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 shadow"
+            className="app-btn app-btn-primary w-full sm:w-auto"
           >
             Update Password
           </button>
-          {passwordMsg && <div className="text-green-600 text-sm mt-2">{passwordMsg}</div>}
+          {passwordMsg && <div className="text-emerald-500 text-sm mt-2">{passwordMsg}</div>}
         </form>
       </section>
 
       {/* Preferences Section */}
-      <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 max-w-xl w-full mx-auto transition-colors duration-300">
-        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-blue-700">
+      <section className="app-card p-4 sm:p-6 max-w-xl w-full mx-auto">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-[var(--primary)]">
           Preferences
         </h3>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
           <span className="font-medium">Dark Mode</span>
           <button
-            onClick={toggleDarkMode}
-            className={`px-4 py-1 rounded-full text-white transition-colors duration-200 ${
-              darkMode ? 'bg-gray-800' : 'bg-gray-400'
-            }`}
+            onClick={handleThemeToggle}
+            className={`app-btn ${theme === 'dark' ? 'app-btn-primary' : 'app-btn-outline'}`}
           >
-            {darkMode ? 'On' : 'Off'}
+            {theme === 'dark' ? 'On' : 'Off'}
           </button>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <span className="font-medium">Enable Notifications</span>
           <button
             onClick={toggleNotifications}
-            className={`px-4 py-1 rounded-full text-white transition-colors duration-200 ${
-              notifications ? 'bg-green-600' : 'bg-gray-400'
-            }`}
+            className={`app-btn ${notifications ? 'app-btn-primary' : 'app-btn-outline'}`}
           >
             {notifications ? 'On' : 'Off'}
           </button>
         </div>
       </section>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }

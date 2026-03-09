@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Login from "../auth/Login";
-import SignUp from "../auth/SignUp";
+import Login from "./Login";
+import SignUp from "./Sign-up";
 
 const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);

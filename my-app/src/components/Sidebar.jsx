@@ -5,7 +5,8 @@ import { HiMenu, HiX } from 'react-icons/hi';
 
 const nav = [
   { label: 'Dashboard', to: '/' },
-  { label: 'Inventory', to: '/supplier' },
+  { label: 'Inventory', to: '/inventory' },
+  { label: 'Suppliers', to: '/suppliers' },
   { label: 'Reports', to: '/report' },
   { label: 'Settings', to: '/settings' },
 ];
@@ -66,5 +67,3 @@ export default function Sidebar() {
     </>
   );
 }
-
-

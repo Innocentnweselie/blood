@@ -1,17 +1,23 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import api from "../utils/axiosInstance";
+import { useAuth } from "./AuthContext.jsx";
 
 const StockContext = createContext(null);
 
 export function StockProvider({ children, initialItems = [] }) {
   const [items, setItems] = useState(initialItems);
   const [loadingStock, setLoadingStock] = useState(false);
+  const { isAuthenticated, loading: authLoading } = useAuth();
 
   const loadStock = async () => {
     try {
       setLoadingStock(true);
-      const res = await api.get("/inventory");
-      setItems(res.data);
+      if (!isAuthenticated) {
+        setItems([]);
+        return;
+      }
+      const res = await api.get("/items");
+      setItems(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Error loading inventory:", err);
     } finally {
@@ -20,13 +26,15 @@ export function StockProvider({ children, initialItems = [] }) {
   };
 
   useEffect(() => {
+    if (authLoading) return;
     loadStock();
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   const addItem = (item) => setItems((prev) => [...prev, item]);
   const updateItem = (id, patch) =>
-    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...patch } : it)));
-  const removeItem = (id) => setItems((prev) => prev.filter((it) => it.id !== id));
+    setItems((prev) => prev.map((it) => ((it._id || it.id) === id ? { ...it, ...patch } : it)));
+  const removeItem = (id) =>
+    setItems((prev) => prev.filter((it) => (it._id || it.id) !== id));
 
   const value = { items, setItems, loadingStock, loadStock, addItem, updateItem, removeItem };
 

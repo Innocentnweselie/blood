@@ -1,0 +1,1 @@
+// This file is a duplicate of src/context/ThemeContext.jsx and should be deleted.

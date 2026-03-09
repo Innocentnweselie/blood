@@ -1,54 +1,100 @@
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { HiEye, HiEyeOff } from "react-icons/hi";
+import api from "../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const ResetPassword = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const email = location.state?.email || "";
+  const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!password || !confirmPassword) {
-      setMessage("Please fill in all fields.");
+    if (!otp || !password || !confirmPassword) {
+      toast.error("Please fill in all fields.");
       return;
     }
     if (password !== confirmPassword) {
-      setMessage("Passwords do not match.");
+      toast.error("Passwords do not match.");
       return;
     }
-    setMessage("Your password has been reset successfully!");
+    
+    try {
+      await api.post('/auth/reset-password', { email, otp, newPassword: password });
+      toast.success("Password reset successful! Please login.");
+      navigate('/login');
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Reset failed.");
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Reset Password</h2>
-        {message && <div className="mb-4 text-blue-500 text-sm text-center">{message}</div>}
+    <div className="min-h-screen flex items-center justify-center app-shell">
+      <div className="app-card p-8 w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center text-[var(--text)]">Reset Password</h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">New Password</label>
+            <label className="block mb-2 text-sm font-medium text-[var(--muted)]">OTP Code</label>
             <input
-              type="password"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter new password"
+              type="text"
+              className="app-input"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              placeholder="Enter 6-digit OTP"
               required
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Confirm Password</label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm new password"
-              required
-            />
+            <label className="block mb-2 text-sm font-medium text-[var(--muted)]">New Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="app-input pr-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter new password"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-0 px-3 flex items-center text-[var(--muted)] hover:text-[var(--text)]"
+                aria-label={showPassword ? "Hide new password" : "Show new password"}
+              >
+                {showPassword ? <HiEyeOff size={18} /> : <HiEye size={18} />}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-[var(--muted)]">Confirm Password</label>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                className="app-input pr-10"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm new password"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-0 px-3 flex items-center text-[var(--muted)] hover:text-[var(--text)]"
+                aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+              >
+                {showConfirmPassword ? <HiEyeOff size={18} /> : <HiEye size={18} />}
+              </button>
+            </div>
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
+            className="app-btn app-btn-primary w-full"
           >
             Reset Password
           </button>
